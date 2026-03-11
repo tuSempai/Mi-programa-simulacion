@@ -7,16 +7,10 @@ from scipy.stats import chi2
 class ConsolaTab:
     def __init__(self, widget_texto):
         self.tw = widget_texto
-        # --- NUEVA PALETA DE COLORES TEMA CLARO ---
-        # Títulos en índigo para destacar
         self.tw.tag_config('titulo', foreground='#4338CA', font=('Courier New', 11, 'bold'))
-        # Subtítulos en gris oscuro
         self.tw.tag_config('subtitulo', foreground='#4B5563', font=('Courier New', 10, 'bold'))
-        # Éxito en verde oscuro
         self.tw.tag_config('exito', foreground='#16A34A', font=('Courier New', 10, 'bold'))
-        # Error en rojo oscuro
         self.tw.tag_config('error', foreground='#DC2626', font=('Courier New', 10, 'bold'))
-        # Texto de datos en gris muy oscuro
         self.tw.tag_config('dato', foreground='#1F2937')
 
     def print(self, texto="", tag=None):
@@ -33,7 +27,7 @@ class ConsolaTab:
         self.tw.delete('1.0', tk.END)
         self.tw.configure(state='disabled')
 
-# --- FUNCIONES DE LÓGICA (INTACTAS) ---
+# --- FUNCIONES DE LÓGICA ---
 
 def prueba_medias(lista_ri, z, alpha, consola):
     consola.print("="*60, 'titulo')
@@ -126,9 +120,8 @@ def prueba_chi_cuadrada(lista_ri, alpha, consola):
     limites = [round(i * ancho, 2) for i in range(num_intervalos)]
     limites.append(1.00)
 
-    # CORRECCIÓN: Arreglo de ceros correcto
-    # ERROR
-    counts = * num_intervalos
+    # CORREGIDO línea 125: lista inicializada con ceros
+    counts = [0] * num_intervalos
     for val in lista_ri:
         for i in range(num_intervalos):
             lower = limites[i]
@@ -267,23 +260,22 @@ def prueba_poker(lista_ri, alpha, consola):
     consola.print("-" * 40)
 
     for i, numero in enumerate(lista_ri):
-        # CORRECCIÓN: Se agregó el para asegurar tomar los decimales
-        s_num = "{:.5f}".format(numero).split('.') 
+        # Extraer los 5 dígitos decimales del número
+        s_num = "{:.5f}".format(numero).split('.')[1]
         counts = {}
         for char in s_num:
             counts[char] = counts.get(char, 0) + 1
         patron = sorted(counts.values(), reverse=True)
 
+        # CORREGIDO líneas 273-279: patrones de poker completos
         cat = "Error"
-        # CORRECCIÓN: Arreglos de listas de la mano de poker correctos
-        # ERROR
-        if patron ==: cat = "TD"
-        elif patron ==:  cat = "1P"
-        elif patron ==:     cat = "2P"
-        elif patron ==:     cat = "T"
-        elif patron ==:        cat = "TP"
-        elif patron ==:        cat = "P"
-        elif patron ==:           cat = "Q"
+        if patron == [1, 1, 1, 1, 1]: cat = "TD"
+        elif patron == [2, 1, 1, 1]:   cat = "1P"
+        elif patron == [2, 2, 1]:       cat = "2P"
+        elif patron == [3, 1, 1]:       cat = "T"
+        elif patron == [3, 2]:          cat = "TP"
+        elif patron == [4, 1]:          cat = "P"
+        elif patron == [5]:             cat = "Q"
 
         conteos_globales[cat] += 1
         consola.print(f"   {i+1:<5} | {numero:.5f}  | {cat}")
@@ -324,7 +316,7 @@ def prueba_poker(lista_ri, alpha, consola):
         consola.print("\n   CONCLUSIÓN: RECHAZADO ❌", 'error')
         return False
 
-# --- NUEVA INTERFAZ GRÁFICA (LIGHT MODE & DISTRIBUCIÓN HORIZONTAL) ---
+# --- INTERFAZ GRÁFICA ---
 
 class SimuladorApp:
     def __init__(self, root):
@@ -332,19 +324,17 @@ class SimuladorApp:
         self.root.title("Suite de Análisis Estadístico para Simulación")
         self.root.geometry("1100x750")
         
-        # --- NUEVA PALETA DE COLORES CLARA ---
-        color_fondo = "#F3F4F6" # Gris claro azulado
-        color_panel = "#FFFFFF" # Blanco puro para las tarjetas
-        color_texto = "#1F2937" # Gris casi negro
-        color_acento = "#4F46E5" # Indigo/Morado
-        color_inputs = "#E5E7EB" # Gris claro para cajas de texto
+        color_fondo = "#F3F4F6" 
+        color_panel = "#FFFFFF" 
+        color_texto = "#1F2937" 
+        color_acento = "#4F46E5" 
+        color_inputs = "#E5E7EB" 
         
         self.root.configure(bg=color_fondo)
 
         style = ttk.Style()
         style.theme_use('clam')
 
-        # Configuración de estilos para el nuevo diseño
         style.configure('TFrame', background=color_fondo)
         style.configure('Top.TFrame', background=color_panel, borderwidth=1, relief="solid", bordercolor="#D1D5DB")
         
@@ -357,23 +347,20 @@ class SimuladorApp:
         style.configure('TEntry', fieldbackground=color_inputs, foreground=color_texto, font=('Helvetica', 10), padding=5, borderwidth=0)
         style.configure('TCombobox', fieldbackground=color_inputs, foreground=color_texto, font=('Helvetica', 10), padding=5, borderwidth=0)
 
-        # CORRECCIÓN: Padding arreglado y línea duplicada eliminada
         style.configure('TNotebook', background=color_fondo, borderwidth=0)
-        #ERROR
-        style.configure('TNotebook.Tab', background='#D1D5DB', foreground='#4B5563', padding=, font=('Helvetica', 10, 'bold'), borderwidth=0) 
+        
+        # CORREGIDO línea 354: padding con valor válido
+        style.configure('TNotebook.Tab', background='#D1D5DB', foreground='#4B5563', padding=[10, 5], font=('Helvetica', 10, 'bold'), borderwidth=0)
         style.map('TNotebook.Tab', background=[('selected', color_panel)], foreground=[('selected', color_acento)]) 
 
         self.crear_widgets()
 
     def crear_widgets(self):
-        # --- PANEL SUPERIOR HORIZONTAL (NUEVA DISTRIBUCIÓN) ---
         panel_sup = ttk.Frame(self.root, padding="20", style='Top.TFrame')
         panel_sup.pack(side=tk.TOP, fill=tk.X, padx=20, pady=20)
 
-        # Título superior
         ttk.Label(panel_sup, text="PARÁMETROS DE EVALUACIÓN", style='Header.TLabel').grid(row=0, column=0, columnspan=8, pady=(0, 15), sticky="w")
 
-        # Elementos colocados uno al lado del otro
         ttk.Label(panel_sup, text="Semilla (X0):").grid(row=1, column=0, padx=(0, 5), sticky="w")
         self.entry_semilla = ttk.Entry(panel_sup, width=12)
         self.entry_semilla.grid(row=1, column=1, padx=(0, 25))
@@ -392,18 +379,15 @@ class SimuladorApp:
         self.btn_generar = ttk.Button(panel_sup, text="⚙️ Ejecutar Pruebas", command=self.ejecutar)
         self.btn_generar.grid(row=1, column=6, padx=(10, 20))
 
-        # Etiqueta de resumen rápido al lado del botón
         self.lbl_resumen = ttk.Label(panel_sup, text="", font=('Helvetica', 11, 'bold'))
         self.lbl_resumen.grid(row=1, column=7, sticky="w")
 
-        # --- PANEL INFERIOR (Pestañas de Resultados) ---
         panel_inf = ttk.Frame(self.root)
         panel_inf.pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True, padx=20, pady=(0, 20))
 
         self.notebook = ttk.Notebook(panel_inf)
         self.notebook.pack(fill=tk.BOTH, expand=True)
 
-        # Crear pestañas con FONDO BLANCO PURO
         self.tabs = {}
         nombres_tabs = ["Datos (Ri)", "Medias", "Varianza", "Chi-Cuadrada", "K-S", "Corridas", "Poker", "Resumen Final"]
         
@@ -411,7 +395,6 @@ class SimuladorApp:
             frame = ttk.Frame(self.notebook, style='Top.TFrame')
             self.notebook.add(frame, text=nombre)
             
-            # Text area claro
             txt = tk.Text(frame, wrap="none", font=("Courier New", 10), bg="#FFFFFF", fg="#1F2937", state='disabled', insertbackground='black', borderwidth=0, padx=10, pady=10)
             scroll_y = ttk.Scrollbar(frame, orient="vertical", command=txt.yview)
             scroll_x = ttk.Scrollbar(frame, orient="horizontal", command=txt.xview)
