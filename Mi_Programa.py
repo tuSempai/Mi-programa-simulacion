@@ -126,7 +126,9 @@ def prueba_chi_cuadrada(lista_ri, alpha, consola):
     limites = [round(i * ancho, 2) for i in range(num_intervalos)]
     limites.append(1.00)
 
-    counts = num_intervalos
+    # CORRECCIÓN: Arreglo de ceros correcto
+    # ERROR
+    counts = * num_intervalos
     for val in lista_ri:
         for i in range(num_intervalos):
             lower = limites[i]
@@ -265,7 +267,7 @@ def prueba_poker(lista_ri, alpha, consola):
     consola.print("-" * 40)
 
     for i, numero in enumerate(lista_ri):
-        # Agregamos para tomar la parte decimal
+        # CORRECCIÓN: Se agregó el para asegurar tomar los decimales
         s_num = "{:.5f}".format(numero).split('.') 
         counts = {}
         for char in s_num:
@@ -273,7 +275,8 @@ def prueba_poker(lista_ri, alpha, consola):
         patron = sorted(counts.values(), reverse=True)
 
         cat = "Error"
-        # Agregamos las listas para que Python sepa qué comparar
+        # CORRECCIÓN: Arreglos de listas de la mano de poker correctos
+        # ERROR
         if patron ==: cat = "TD"
         elif patron ==:  cat = "1P"
         elif patron ==:     cat = "2P"
@@ -347,14 +350,16 @@ class SimuladorApp:
         
         style.configure('TLabel', background=color_panel, foreground=color_texto, font=('Helvetica', 10))
         style.configure('Header.TLabel', font=('Helvetica', 14, 'bold'), background=color_panel, foreground=color_acento)
-
-        style.configure('TNotebook.Tab', background='#D1D5DB', foreground='#4B5563', padding=, font=('Helvetica', 10, 'bold'), borderwidth=0)
+        
+        style.configure('TButton', font=('Helvetica', 10, 'bold'), background=color_acento, foreground='white', borderwidth=0, padding=8)
         style.map('TButton', background=[('active', '#4338CA')]) 
 
         style.configure('TEntry', fieldbackground=color_inputs, foreground=color_texto, font=('Helvetica', 10), padding=5, borderwidth=0)
         style.configure('TCombobox', fieldbackground=color_inputs, foreground=color_texto, font=('Helvetica', 10), padding=5, borderwidth=0)
 
+        # CORRECCIÓN: Padding arreglado y línea duplicada eliminada
         style.configure('TNotebook', background=color_fondo, borderwidth=0)
+        #ERROR
         style.configure('TNotebook.Tab', background='#D1D5DB', foreground='#4B5563', padding=, font=('Helvetica', 10, 'bold'), borderwidth=0) 
         style.map('TNotebook.Tab', background=[('selected', color_panel)], foreground=[('selected', color_acento)]) 
 
@@ -483,7 +488,6 @@ class SimuladorApp:
                 consola_resumen.print(f"   {nombre:<20}: RECHAZADO ❌", 'error')
                 todo_ok = False
 
-        # Se actualizaron los colores del lbl_resumen para que coincidan con el tema claro
         if todo_ok:
             self.lbl_resumen.config(text="✓ TODAS APROBADAS", foreground="#16A34A")
             consola_resumen.print("\n   ESTADO FINAL: EXCELENTE (Pasan todas) 🌟", 'exito')
