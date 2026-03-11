@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 import math
 from scipy.stats import chi2
-
+#HOLA GENTE
 # --- CLASE PARA MANEJAR LA SALIDA DE TEXTO EN LAS PESTAÑAS ---
 class ConsolaTab:
     def __init__(self, widget_texto):
