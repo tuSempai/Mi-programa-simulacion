@@ -7,19 +7,24 @@ from scipy.stats import chi2
 class ConsolaTab:
     def __init__(self, widget_texto):
         self.tw = widget_texto
-        # --- COLORES ADAPTADOS AL NUEVO TEMA SLATE ---
-        self.tw.tag_config('titulo', foreground='#38bdf8', font=('Consolas', 11, 'bold'))
-        self.tw.tag_config('subtitulo', foreground='#cbd5e1', font=('Consolas', 10, 'bold'))
-        self.tw.tag_config('exito', foreground='#4ade80', font=('Consolas', 10, 'bold'))
-        self.tw.tag_config('error', foreground='#f87171', font=('Consolas', 10, 'bold'))
-        self.tw.tag_config('dato', foreground='#f8fafc')
+        # --- NUEVA PALETA DE COLORES TEMA CLARO ---
+        # Títulos en índigo para destacar
+        self.tw.tag_config('titulo', foreground='#4338CA', font=('Courier New', 11, 'bold'))
+        # Subtítulos en gris oscuro
+        self.tw.tag_config('subtitulo', foreground='#4B5563', font=('Courier New', 10, 'bold'))
+        # Éxito en verde oscuro
+        self.tw.tag_config('exito', foreground='#16A34A', font=('Courier New', 10, 'bold'))
+        # Error en rojo oscuro
+        self.tw.tag_config('error', foreground='#DC2626', font=('Courier New', 10, 'bold'))
+        # Texto de datos en gris muy oscuro
+        self.tw.tag_config('dato', foreground='#1F2937')
 
     def print(self, texto="", tag=None):
         self.tw.configure(state='normal')
         if tag:
             self.tw.insert(tk.END, texto + "\n", tag)
         else:
-            self.tw.insert(tk.END, texto + "\n")
+            self.tw.insert(tk.END, texto + "\n", 'dato')
         self.tw.configure(state='disabled')
         self.tw.see(tk.END)
 
@@ -28,9 +33,7 @@ class ConsolaTab:
         self.tw.delete('1.0', tk.END)
         self.tw.configure(state='disabled')
 
-# =========================================================
 # --- FUNCIONES DE LÓGICA (INTACTAS) ---
-# =========================================================
 
 def prueba_medias(lista_ri, z, alpha, consola):
     consola.print("="*60, 'titulo')
@@ -262,18 +265,13 @@ def prueba_poker(lista_ri, alpha, consola):
     consola.print("-" * 40)
 
     for i, numero in enumerate(lista_ri):
-        # Tomar SOLO los 5 dígitos decimales como string
         s_num = "{:.5f}".format(numero).split('.')
         counts = {}
-        
-        # Contar cada dígito
         for char in s_num:
             counts[char] = counts.get(char, 0) + 1
-            
         patron = sorted(counts.values(), reverse=True)
 
         cat = "Error"
-        #ERROR EN LAS LINEAS 277 HASTA LA 283
         if patron ==: cat = "TD"
         elif patron ==:  cat = "1P"
         elif patron ==:     cat = "2P"
@@ -321,99 +319,93 @@ def prueba_poker(lista_ri, alpha, consola):
         consola.print("\n   CONCLUSIÓN: RECHAZADO ❌", 'error')
         return False
 
-# =========================================================
-# --- INTERFAZ GRÁFICA PRINCIPAL REDISEÑADA ---
-# =========================================================
+# --- NUEVA INTERFAZ GRÁFICA (LIGHT MODE & DISTRIBUCIÓN HORIZONTAL) ---
 
 class SimuladorApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("Software de Simulación Profesional - Pruebas Estadísticas")
-        self.root.geometry("1080x720")
+        self.root.title("Suite de Análisis Estadístico para Simulación")
+        self.root.geometry("1100x750")
         
-        # --- NUEVA PALETA DE COLORES (Slate Moderno) ---
-        color_fondo = "#1e293b"  # Slate 800 (Fondo principal)
-        color_panel = "#0f172a"  # Slate 900 (Panel izquierdo más oscuro)
-        color_texto = "#f1f5f9"  # Blanco humo para textos
-        color_acento = "#0284c7" # Azul profesional
-        color_inputs = "#334155" # Slate 700 (Cajas de texto)
+        # --- NUEVA PALETA DE COLORES CLARA ---
+        color_fondo = "#F3F4F6" # Gris claro azulado
+        color_panel = "#FFFFFF" # Blanco puro para las tarjetas
+        color_texto = "#1F2937" # Gris casi negro
+        color_acento = "#4F46E5" # Indigo/Morado
+        color_inputs = "#E5E7EB" # Gris claro para cajas de texto
         
         self.root.configure(bg=color_fondo)
 
         style = ttk.Style()
         style.theme_use('clam')
 
-        # Configuración de estilos
+        # Configuración de estilos para el nuevo diseño
         style.configure('TFrame', background=color_fondo)
-        style.configure('Side.TFrame', background=color_panel, borderwidth=0)
+        style.configure('Top.TFrame', background=color_panel, borderwidth=1, relief="solid", bordercolor="#D1D5DB")
+        
+        style.configure('TLabel', background=color_panel, foreground=color_texto, font=('Helvetica', 10))
+        style.configure('Header.TLabel', font=('Helvetica', 14, 'bold'), background=color_panel, foreground=color_acento)
 
-        style.configure('TLabel', background=color_fondo, foreground=color_texto, font=('Segoe UI', 10))
-        style.configure('Side.TLabel', background=color_panel, foreground=color_texto, font=('Segoe UI', 10, 'bold'))
+        style.configure('TButton', font=('Helvetica', 10, 'bold'), background=color_acento, foreground='white', borderwidth=0, padding=8)
+        style.map('TButton', background=[('active', '#4338CA')]) 
 
-        style.configure('Header.TLabel', font=('Segoe UI', 14, 'bold'), background=color_panel, foreground='#38bdf8')
-
-        style.configure('TButton', font=('Segoe UI', 11, 'bold'), background=color_acento, foreground='white', borderwidth=0)
-        style.map('TButton', background=[('active', '#0369a1')]) 
-
-        style.configure('TEntry', fieldbackground=color_inputs, foreground='#ffffff', font=('Segoe UI', 10), padding=6, borderwidth=0)
-        style.map('TEntry', fieldbackground=[('focus', '#475569')]) 
-
-        style.configure('TCombobox', fieldbackground=color_inputs, foreground='#ffffff', font=('Segoe UI', 10), padding=6, borderwidth=0)
-        style.map('TCombobox', fieldbackground=[('readonly', color_inputs)]) 
+        style.configure('TEntry', fieldbackground=color_inputs, foreground=color_texto, font=('Helvetica', 10), padding=5, borderwidth=0)
+        style.configure('TCombobox', fieldbackground=color_inputs, foreground=color_texto, font=('Helvetica', 10), padding=5, borderwidth=0)
 
         style.configure('TNotebook', background=color_fondo, borderwidth=0)
-        style.configure('TNotebook.Tab', background=color_panel, foreground='#94a3b8', padding= nano, font=('Segoe UI', 10, 'bold'), borderwidth=0) 
-        style.map('TNotebook.Tab', background=[('selected', color_fondo)], foreground=[('selected', '#38bdf8')]) 
+        style.configure('TNotebook.Tab', background='#D1D5DB', foreground='#4B5563', padding=nano, font=('Helvetica', 10, 'bold'), borderwidth=0) 
+        style.map('TNotebook.Tab', background=[('selected', color_panel)], foreground=[('selected', color_acento)]) 
 
-        self.crear_widgets(color_panel, color_fondo)
+        self.crear_widgets()
 
-    def crear_widgets(self, color_panel, color_fondo):
-        # --- Panel Izquierdo (Inputs Rediseñados con Grid) ---
-        panel_izq = ttk.Frame(self.root, padding="25", style='Side.TFrame')
-        panel_izq.pack(side=tk.LEFT, fill=tk.Y)
+    def crear_widgets(self):
+        # --- PANEL SUPERIOR HORIZONTAL (NUEVA DISTRIBUCIÓN) ---
+        panel_sup = ttk.Frame(self.root, padding="20", style='Top.TFrame')
+        panel_sup.pack(side=tk.TOP, fill=tk.X, padx=20, pady=20)
 
-        # Título
-        ttk.Label(panel_izq, text="⚙️ CONFIGURACIÓN", style='Header.TLabel').grid(row=0, column=0, columnspan=2, pady=(10, 35), sticky="w")
+        # Título superior
+        ttk.Label(panel_sup, text="PARÁMETROS DE EVALUACIÓN", style='Header.TLabel').grid(row=0, column=0, columnspan=8, pady=(0, 15), sticky="w")
 
-        # Entradas alineadas con Grid
-        ttk.Label(panel_izq, text="Semilla (X0):", style='Side.TLabel').grid(row=1, column=0, sticky="w", pady=12, padx=(0,10))
-        self.entry_semilla = ttk.Entry(panel_izq, width=14)
-        self.entry_semilla.grid(row=1, column=1, sticky="e", pady=12)
+        # Elementos colocados uno al lado del otro
+        ttk.Label(panel_sup, text="Semilla (X0):").grid(row=1, column=0, padx=(0, 5), sticky="w")
+        self.entry_semilla = ttk.Entry(panel_sup, width=12)
+        self.entry_semilla.grid(row=1, column=1, padx=(0, 25))
+        self.entry_semilla.insert(0, "")
 
-        ttk.Label(panel_izq, text="Cantidad (N):", style='Side.TLabel').grid(row=2, column=0, sticky="w", pady=12, padx=(0,10))
-        self.entry_cantidad = ttk.Entry(panel_izq, width=14)
-        self.entry_cantidad.grid(row=2, column=1, sticky="e", pady=12)
+        ttk.Label(panel_sup, text="Cant. (N):").grid(row=1, column=2, padx=(0, 5), sticky="w")
+        self.entry_cantidad = ttk.Entry(panel_sup, width=12)
+        self.entry_cantidad.grid(row=1, column=3, padx=(0, 25))
+        self.entry_cantidad.insert(0, "")
 
-        ttk.Label(panel_izq, text="Confianza:", style='Side.TLabel').grid(row=3, column=0, sticky="w", pady=12, padx=(0,10))
-        self.combo_confianza = ttk.Combobox(panel_izq, values=["90%", "95%", "99%"], state="readonly", width=12)
+        ttk.Label(panel_sup, text="Confianza:").grid(row=1, column=4, padx=(0, 5), sticky="w")
+        self.combo_confianza = ttk.Combobox(panel_sup, values=["90%", "95%", "99%"], state="readonly", width=10)
         self.combo_confianza.current(1)
-        self.combo_confianza.grid(row=3, column=1, sticky="e", pady=12)
+        self.combo_confianza.grid(row=1, column=5, padx=(0, 25))
 
-        # Botón Centrado y más amplio
-        self.btn_generar = ttk.Button(panel_izq, text="▶ GENERAR Y EVALUAR", command=self.ejecutar)
-        self.btn_generar.grid(row=4, column=0, columnspan=2, fill=tk.X, pady=(40, 15), ipady=8)
+        self.btn_generar = ttk.Button(panel_sup, text="⚙️ Ejecutar Pruebas", command=self.ejecutar)
+        self.btn_generar.grid(row=1, column=6, padx=(10, 20))
 
-        # Label de Resumen
-        self.lbl_resumen = ttk.Label(panel_izq, text="", font=('Segoe UI', 11, 'bold'), background=color_panel, justify="center")
-        self.lbl_resumen.grid(row=5, column=0, columnspan=2, pady=20)
+        # Etiqueta de resumen rápido al lado del botón
+        self.lbl_resumen = ttk.Label(panel_sup, text="", font=('Helvetica', 11, 'bold'))
+        self.lbl_resumen.grid(row=1, column=7, sticky="w")
 
-        # --- Panel Derecho (Pestañas de Resultados) ---
-        panel_der = ttk.Frame(self.root, padding="15")
-        panel_der.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
+        # --- PANEL INFERIOR (Pestañas de Resultados) ---
+        panel_inf = ttk.Frame(self.root)
+        panel_inf.pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True, padx=20, pady=(0, 20))
 
-        self.notebook = ttk.Notebook(panel_der)
+        self.notebook = ttk.Notebook(panel_inf)
         self.notebook.pack(fill=tk.BOTH, expand=True)
 
-        # Crear pestañas con fondo adaptado al nuevo tema
+        # Crear pestañas con FONDO BLANCO PURO
         self.tabs = {}
         nombres_tabs = ["Datos (Ri)", "Medias", "Varianza", "Chi-Cuadrada", "K-S", "Corridas", "Poker", "Resumen Final"]
         
         for nombre in nombres_tabs:
-            frame = ttk.Frame(self.notebook)
+            frame = ttk.Frame(self.notebook, style='Top.TFrame')
             self.notebook.add(frame, text=nombre)
             
-            # Fondo de la consola adaptado al color general
-            txt = tk.Text(frame, wrap="none", font=("Consolas", 10), bg=color_fondo, fg="#f8fafc", state='disabled', insertbackground='white', borderwidth=0, padx=10, pady=10)
+            # Text area claro
+            txt = tk.Text(frame, wrap="none", font=("Courier New", 10), bg="#FFFFFF", fg="#1F2937", state='disabled', insertbackground='black', borderwidth=0, padx=10, pady=10)
             scroll_y = ttk.Scrollbar(frame, orient="vertical", command=txt.yview)
             scroll_x = ttk.Scrollbar(frame, orient="horizontal", command=txt.xview)
             txt.configure(yscrollcommand=scroll_y.set, xscrollcommand=scroll_x.set)
@@ -489,11 +481,12 @@ class SimuladorApp:
                 consola_resumen.print(f"   {nombre:<20}: RECHAZADO ❌", 'error')
                 todo_ok = False
 
+        # Se actualizaron los colores del lbl_resumen para que coincidan con el tema claro
         if todo_ok:
-            self.lbl_resumen.config(text="ESTADO: EXCELENTE 🌟\n(Todas las pruebas pasaron)", foreground="#4ade80")
+            self.lbl_resumen.config(text="✓ TODAS APROBADAS", foreground="#16A34A")
             consola_resumen.print("\n   ESTADO FINAL: EXCELENTE (Pasan todas) 🌟", 'exito')
         else:
-            self.lbl_resumen.config(text="ESTADO: ALERTA ⚠️\n(Revisar rechazos)", foreground="#f87171")
+            self.lbl_resumen.config(text="⚠ HAY RECHAZOS", foreground="#DC2626")
             consola_resumen.print("\n   ESTADO FINAL: ALGUNAS FALLAN ⚠️", 'error')
 
         self.notebook.select(7)
