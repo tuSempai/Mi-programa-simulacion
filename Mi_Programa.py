@@ -273,6 +273,7 @@ def prueba_poker(lista_ri, alpha, consola):
         patron = sorted(counts.values(), reverse=True)
 
         cat = "Error"
+        #ERROR EN LAS LINEAS 277 HASTA LA 283
         if patron ==: cat = "TD"
         elif patron ==:  cat = "1P"
         elif patron ==:     cat = "2P"
