@@ -126,7 +126,7 @@ def prueba_chi_cuadrada(lista_ri, alpha, consola):
     limites = [round(i * ancho, 2) for i in range(num_intervalos)]
     limites.append(1.00)
 
-    counts = nano * num_intervalos
+    counts = num_intervalos
     for val in lista_ri:
         for i in range(num_intervalos):
             lower = limites[i]
@@ -265,13 +265,15 @@ def prueba_poker(lista_ri, alpha, consola):
     consola.print("-" * 40)
 
     for i, numero in enumerate(lista_ri):
-        s_num = "{:.5f}".format(numero).split('.')
+        # Agregamos para tomar la parte decimal
+        s_num = "{:.5f}".format(numero).split('.') 
         counts = {}
         for char in s_num:
             counts[char] = counts.get(char, 0) + 1
         patron = sorted(counts.values(), reverse=True)
 
         cat = "Error"
+        # Agregamos las listas para que Python sepa qué comparar
         if patron ==: cat = "TD"
         elif patron ==:  cat = "1P"
         elif patron ==:     cat = "2P"
@@ -346,14 +348,14 @@ class SimuladorApp:
         style.configure('TLabel', background=color_panel, foreground=color_texto, font=('Helvetica', 10))
         style.configure('Header.TLabel', font=('Helvetica', 14, 'bold'), background=color_panel, foreground=color_acento)
 
-        style.configure('TButton', font=('Helvetica', 10, 'bold'), background=color_acento, foreground='white', borderwidth=0, padding=8)
+        style.configure('TNotebook.Tab', background='#D1D5DB', foreground='#4B5563', padding=, font=('Helvetica', 10, 'bold'), borderwidth=0)
         style.map('TButton', background=[('active', '#4338CA')]) 
 
         style.configure('TEntry', fieldbackground=color_inputs, foreground=color_texto, font=('Helvetica', 10), padding=5, borderwidth=0)
         style.configure('TCombobox', fieldbackground=color_inputs, foreground=color_texto, font=('Helvetica', 10), padding=5, borderwidth=0)
 
         style.configure('TNotebook', background=color_fondo, borderwidth=0)
-        style.configure('TNotebook.Tab', background='#D1D5DB', foreground='#4B5563', padding=nano, font=('Helvetica', 10, 'bold'), borderwidth=0) 
+        style.configure('TNotebook.Tab', background='#D1D5DB', foreground='#4B5563', padding=, font=('Helvetica', 10, 'bold'), borderwidth=0) 
         style.map('TNotebook.Tab', background=[('selected', color_panel)], foreground=[('selected', color_acento)]) 
 
         self.crear_widgets()
