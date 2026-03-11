@@ -270,12 +270,12 @@ def prueba_poker(lista_ri, alpha, consola):
 
         cat = "Error"
         if patron ==: cat = "TD"
-        elif patron ==:  cat = "1P"
+        elif patron ==: cat = "1P"
         elif patron ==:     cat = "2P"
         elif patron ==:     cat = "T"
         elif patron ==:        cat = "TP"
         elif patron ==:        cat = "P"
-        elif patron ==:           cat = "Q"
+        elif patron ==:           cat = "Q" 
 
         conteos_globales[cat] += 1
         consola.print(f"   {i+1:<5} | {numero:.5f}  | {cat}")
