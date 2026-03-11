@@ -262,20 +262,24 @@ def prueba_poker(lista_ri, alpha, consola):
     consola.print("-" * 40)
 
     for i, numero in enumerate(lista_ri):
+        # Tomar SOLO los 5 dígitos decimales como string
         s_num = "{:.5f}".format(numero).split('.')
         counts = {}
+        
+        # Contar cada dígito
         for char in s_num:
             counts[char] = counts.get(char, 0) + 1
+            
         patron = sorted(counts.values(), reverse=True)
 
         cat = "Error"
         if patron ==: cat = "TD"
-        elif patron ==: cat = "1P"
+        elif patron ==:  cat = "1P"
         elif patron ==:     cat = "2P"
         elif patron ==:     cat = "T"
         elif patron ==:        cat = "TP"
         elif patron ==:        cat = "P"
-        elif patron ==:           cat = "Q" 
+        elif patron ==:           cat = "Q"
 
         conteos_globales[cat] += 1
         consola.print(f"   {i+1:<5} | {numero:.5f}  | {cat}")
