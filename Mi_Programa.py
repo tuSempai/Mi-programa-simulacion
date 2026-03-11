@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 import math
 from scipy.stats import chi2
-#HOLA GENTE
+
 # --- CLASE PARA MANEJAR LA SALIDA DE TEXTO EN LAS PESTAÑAS ---
 class ConsolaTab:
     def __init__(self, widget_texto):
@@ -27,12 +27,10 @@ class ConsolaTab:
         self.tw.delete('1.0', tk.END)
         self.tw.configure(state='disabled')
 
-# --- FUNCIONES DE LÓGICA ---
-
 def prueba_medias(lista_ri, z, alpha, consola):
-    consola.print("="*60, 'titulo')
-    consola.print("   PRUEBA DE MEDIAS", 'titulo')
-    consola.print("="*60, 'titulo')
+    consola.print("+" + "-"*58 + "+", 'titulo')
+    consola.print("| PRUEBA DE MEDIAS                                         |", 'titulo')
+    consola.print("+" + "-"*58 + "+", 'titulo')
 
     n = len(lista_ri)
     promedio = sum(lista_ri) / n
@@ -43,29 +41,29 @@ def prueba_medias(lista_ri, z, alpha, consola):
     li = 0.5 - margen
     ls = 0.5 + margen
 
-    consola.print("\n--- DATOS Y CÁLCULOS ---", 'subtitulo')
-    consola.print(f"   1. N: {n}")
-    consola.print(f"   2. Promedio: {promedio:.8f}")
-    consola.print(f"   3. Z: {z}")
-    consola.print(f"   4. Raíz(12n): {raiz_12n:.8f}")
+    consola.print("\n>>> DATOS Y CÁLCULOS", 'subtitulo')
+    consola.print(f"  * N         : {n}")
+    consola.print(f"  * Promedio  : {promedio:.8f}")
+    consola.print(f"  * Z         : {z}")
+    consola.print(f"  * Raíz(12n) : {raiz_12n:.8f}")
 
-    consola.print("-" * 40)
-    consola.print("--- RESULTADOS ---", 'subtitulo')
-    consola.print(f"   Límite Inferior: {li:.8f}")
-    consola.print(f"   Límite Superior: {ls:.8f}")
-    consola.print("-" * 40)
+    consola.print("." * 40)
+    consola.print(">>> RESULTADOS", 'subtitulo')
+    consola.print(f"  * Límite Inferior : {li:.8f}")
+    consola.print(f"  * Límite Superior : {ls:.8f}")
+    consola.print("." * 40)
 
     if li <= promedio <= ls:
-        consola.print("   CONCLUSIÓN: APROBADO ✅", 'exito')
+        consola.print("  >> DICTAMEN: APROBADO [OK]", 'exito')
         return True
     else:
-        consola.print("   CONCLUSIÓN: RECHAZADO ❌", 'error')
+        consola.print("  >> DICTAMEN: RECHAZADO [FALLO]", 'error')
         return False
 
 def prueba_varianza(lista_ri, alpha, consola):
-    consola.print("="*60, 'titulo')
-    consola.print("   PRUEBA DE VARIANZA", 'titulo')
-    consola.print("="*60, 'titulo')
+    consola.print("+" + "-"*58 + "+", 'titulo')
+    consola.print("| PRUEBA DE VARIANZA                                       |", 'titulo')
+    consola.print("+" + "-"*58 + "+", 'titulo')
 
     n = len(lista_ri)
     gl = n - 1
@@ -82,32 +80,32 @@ def prueba_varianza(lista_ri, alpha, consola):
     valor_mayor = max(val_calculado_1, val_calculado_2)
     valor_menor = min(val_calculado_1, val_calculado_2)
 
-    consola.print("\n--- DATOS ---", 'subtitulo')
-    consola.print(f"   1. Varianza: {varianza:.8f}")
-    consola.print(f"   2. Grados Libertad: {gl}")
+    consola.print("\n>>> DATOS", 'subtitulo')
+    consola.print(f"  * Varianza        : {varianza:.8f}")
+    consola.print(f"  * Grados Libertad : {gl}")
 
-    consola.print("-" * 40)
-    consola.print("--- TABLA CHI CUADRADA ---", 'subtitulo')
-    consola.print(f"   Coeficiente Inferior: {coef_inferior:.6f}")
-    consola.print(f"   Coeficiente Superior: {coef_superior:.6f}")
+    consola.print("." * 40)
+    consola.print(">>> TABLA CHI CUADRADA", 'subtitulo')
+    consola.print(f"  * Coeficiente Inferior : {coef_inferior:.6f}")
+    consola.print(f"  * Coeficiente Superior : {coef_superior:.6f}")
 
-    consola.print("-" * 40)
-    consola.print("--- RESULTADOS (LÍMITES) ---", 'subtitulo')
-    consola.print(f"   Límite Inferior (Resultado Mayor): {valor_mayor:.8f}")
-    consola.print(f"   Límite Superior (Resultado Menor): {valor_menor:.8f}")
-    consola.print("-" * 40)
+    consola.print("." * 40)
+    consola.print(">>> RESULTADOS (LÍMITES)", 'subtitulo')
+    consola.print(f"  * Límite Inferior (Cálculo 1) : {valor_menor:.8f}")
+    consola.print(f"  * Límite Superior (Cálculo 2) : {valor_mayor:.8f}")
+    consola.print("." * 40)
 
     if valor_menor <= varianza <= valor_mayor:
-        consola.print("   CONCLUSIÓN: APROBADO ✅", 'exito')
+        consola.print("  >> DICTAMEN: APROBADO [OK]", 'exito')
         return True
     else:
-        consola.print("   CONCLUSIÓN: RECHAZADO ❌", 'error')
+        consola.print("  >> DICTAMEN: RECHAZADO [FALLO]", 'error')
         return False
 
 def prueba_chi_cuadrada(lista_ri, alpha, consola):
-    consola.print("="*85, 'titulo')
-    consola.print("   PRUEBA DE CHI-CUADRADA (DISTRIBUCIÓN)", 'titulo')
-    consola.print("="*85, 'titulo')
+    consola.print("+" + "-"*83 + "+", 'titulo')
+    consola.print("| PRUEBA DE CHI-CUADRADA (DISTRIBUCIÓN)                                             |", 'titulo')
+    consola.print("+" + "-"*83 + "+", 'titulo')
 
     n = len(lista_ri)
     m_exact = math.sqrt(n)
@@ -115,12 +113,12 @@ def prueba_chi_cuadrada(lista_ri, alpha, consola):
     ancho = 1 / num_intervalos
     expected_val = m_exact
 
-    consola.print(f"\n   Datos: N={n}, M={num_intervalos}, E={expected_val:.8f}\n")
+    consola.print(f"\n   Datos Generales -> N: {n} | M: {num_intervalos} | E: {expected_val:.8f}\n")
 
     limites = [round(i * ancho, 2) for i in range(num_intervalos)]
     limites.append(1.00)
 
-    # CORREGIDO línea 125: lista inicializada con ceros
+    # FIX LÍNEA 124: era "counts = * num_intervalos"
     counts = [0] * num_intervalos
     for val in lista_ri:
         for i in range(num_intervalos):
@@ -135,9 +133,9 @@ def prueba_chi_cuadrada(lista_ri, alpha, consola):
                     counts[i] += 1
                     break
 
-    consola.print("-" * 85)
-    consola.print(f"   {'Intervalo':<15} | {'Obs':<8} | {'Esp':<12} | {'(O-E)^2/E':<15}")
-    consola.print("-" * 85)
+    consola.print("." * 85)
+    consola.print(f"   {'Intervalo':<15} | {'Obs (O)':<10} | {'Esp (E)':<12} | {'Estadístico (O-E)^2/E':<15}")
+    consola.print("." * 85)
 
     chi_cuadrada_calc = 0
     for i in range(num_intervalos):
@@ -147,26 +145,27 @@ def prueba_chi_cuadrada(lista_ri, alpha, consola):
         val_chi = ((oi - expected_val) ** 2) / expected_val
         chi_cuadrada_calc += val_chi
         label = f"{lower:.2f} - {upper:.2f}"
-        consola.print(f"   {label:<15} | {oi:<8} | {expected_val:<12.8f} | {val_chi:<15.8f}")
+        consola.print(f"   {label:<15} | {oi:<10} | {expected_val:<12.8f} | {val_chi:<15.8f}")
 
     gl = num_intervalos - 1
     if gl < 1: gl = 1
     valor_critico = chi2.ppf(1 - alpha, gl)
 
-    consola.print("-" * 85)
-    consola.print(f"   Chi2 Calc (Suma): {chi_cuadrada_calc:.8f} | Chi2 Crítico: {valor_critico:.8f}")
+    consola.print("." * 85)
+    consola.print(f"   Total Chi2 Calculado : {chi_cuadrada_calc:.8f}")
+    consola.print(f"   Chi2 Crítico (Tabla) : {valor_critico:.8f}")
 
     if chi_cuadrada_calc <= valor_critico:
-        consola.print("\n   CONCLUSIÓN: APROBADO ✅", 'exito')
+        consola.print("\n  >> DICTAMEN: APROBADO [OK]", 'exito')
         return True
     else:
-        consola.print("\n   CONCLUSIÓN: RECHAZADO ❌", 'error')
+        consola.print("\n  >> DICTAMEN: RECHAZADO [FALLO]", 'error')
         return False
 
 def prueba_kolmogorov_smirnov(lista_ri, base_ks, consola):
-    consola.print("="*85, 'titulo')
-    consola.print("   PRUEBA DE KOLMOGOROV-SMIRNOV (K-S)", 'titulo')
-    consola.print("="*85, 'titulo')
+    consola.print("+" + "-"*83 + "+", 'titulo')
+    consola.print("| PRUEBA DE KOLMOGOROV-SMIRNOV (K-S)                                                |", 'titulo')
+    consola.print("+" + "-"*83 + "+", 'titulo')
 
     datos = sorted(lista_ri)
     n = len(datos)
@@ -174,7 +173,7 @@ def prueba_kolmogorov_smirnov(lista_ri, base_ks, consola):
     max_d_minus = -1.0
 
     consola.print(f"\n   {'i':<4} | {'Ri(Ord)':<10} | {'i/n':<10} | {'(i-1)/n':<10} | {'D+':<12} | {'D-':<12}")
-    consola.print("-" * 85)
+    consola.print("." * 85)
 
     for i in range(1, n + 1):
         ri = datos[i-1]
@@ -190,36 +189,37 @@ def prueba_kolmogorov_smirnov(lista_ri, base_ks, consola):
     d_max_total = max(max_d_plus, max_d_minus)
     d_critico = base_ks / math.sqrt(n)
 
-    consola.print("-" * 85)
-    consola.print(f"   D Máximo: {d_max_total:.6f} | D Crítico: {d_critico:.6f}")
+    consola.print("." * 85)
+    consola.print(f"   D Máximo Encontrado : {d_max_total:.6f}")
+    consola.print(f"   D Crítico Permitido : {d_critico:.6f}")
 
     if d_max_total < d_critico:
-        consola.print("\n   CONCLUSIÓN: APROBADO ✅", 'exito')
+        consola.print("\n  >> DICTAMEN: APROBADO [OK]", 'exito')
         return True
     else:
-        consola.print("\n   CONCLUSIÓN: RECHAZADO ❌", 'error')
+        consola.print("\n  >> DICTAMEN: RECHAZADO [FALLO]", 'error')
         return False
 
 def prueba_corridas_arriba_abajo(lista_ri, z_critico, consola):
-    consola.print("="*60, 'titulo')
-    consola.print("   PRUEBA DE CORRIDAS (ARRIBA Y ABAJO)", 'titulo')
-    consola.print("="*60, 'titulo')
+    consola.print("+" + "-"*58 + "+", 'titulo')
+    consola.print("| PRUEBA DE CORRIDAS (ARRIBA Y ABAJO)                      |", 'titulo')
+    consola.print("+" + "-"*58 + "+", 'titulo')
 
     n = len(lista_ri)
     secuencia_signos = []
 
-    consola.print(f"\n   {'i':<4} | {'Ri':<10} | {'Ri+1':<10} | {'S'}")
-    consola.print("-" * 50)
+    consola.print(f"\n   {'i':<4} | {'Ri':<10} | {'Ri+1':<10} | {'S (Signo)'}")
+    consola.print("." * 50)
 
     for i in range(n - 1):
         actual = lista_ri[i]
         siguiente = lista_ri[i+1]
         if siguiente >= actual:
             signo = 1
-            simbolo = "1 (+)"
+            simbolo = "(+)"
         else:
             signo = 0
-            simbolo = "0 (-)"
+            simbolo = "(-)"
         secuencia_signos.append(signo)
         consola.print(f"   {i+1:<4} | {actual:<10.6f} | {siguiente:<10.6f} | {simbolo}")
 
@@ -234,55 +234,55 @@ def prueba_corridas_arriba_abajo(lista_ri, z_critico, consola):
     z_calc = (corridas_co - mu_co) / sigma_co
     z_calc_abs = abs(z_calc)
 
-    consola.print("-" * 50)
-    consola.print(f"   Corridas (Co): {corridas_co}")
-    consola.print(f"   Media (Mu): {mu_co:.6f}")
-    consola.print(f"   Varianza: {var_co:.6f}")
-    consola.print(f"   Z Calculado (|Z|): {z_calc_abs:.6f}")
-    consola.print(f"   Z Crítico: {z_critico:.6f}")
+    consola.print("." * 50)
+    consola.print(f"   Corridas Totales (Co) : {corridas_co}")
+    consola.print(f"   Valor Esperado (Mu)   : {mu_co:.6f}")
+    consola.print(f"   Varianza              : {var_co:.6f}")
+    consola.print(f"   Z Calculado (|Z|)     : {z_calc_abs:.6f}")
+    consola.print(f"   Z Crítico (Tablas)    : {z_critico:.6f}")
 
     if z_calc_abs < z_critico:
-        consola.print("\n   CONCLUSIÓN: APROBADO ✅", 'exito')
+        consola.print("\n  >> DICTAMEN: APROBADO [OK]", 'exito')
         return True
     else:
-        consola.print("\n   CONCLUSIÓN: RECHAZADO ❌", 'error')
+        consola.print("\n  >> DICTAMEN: RECHAZADO [FALLO]", 'error')
         return False
 
 def prueba_poker(lista_ri, alpha, consola):
-    consola.print("="*60, 'titulo')
-    consola.print("   PRUEBA DE POKER", 'titulo')
-    consola.print("="*60, 'titulo')
+    consola.print("+" + "-"*58 + "+", 'titulo')
+    consola.print("| PRUEBA DE POKER                                          |", 'titulo')
+    consola.print("+" + "-"*58 + "+", 'titulo')
 
     n = len(lista_ri)
     conteos_globales = {"TD": 0, "1P": 0, "2P": 0, "TP": 0, "T": 0, "P": 0, "Q": 0}
 
     consola.print(f"\n   {'i':<5} | {'Ri':<10} | {'Categoría'}")
-    consola.print("-" * 40)
+    consola.print("." * 40)
 
     for i, numero in enumerate(lista_ri):
-        # Extraer los 5 dígitos decimales del número
-        s_num = "{:.5f}".format(numero).split('.')[1]
+        # Tomar solo los 5 dígitos decimales e iterar dígito por dígito
+        decimal_str = "{:.5f}".format(numero).split('.')[1]
         counts = {}
-        for char in s_num:
+        for char in decimal_str:
             counts[char] = counts.get(char, 0) + 1
         patron = sorted(counts.values(), reverse=True)
 
-        # CORREGIDO líneas 273-279: patrones de poker completos
+        # FIX LÍNEAS 272-278: patrones de comparación estaban vacíos
         cat = "Error"
-        if patron == [1, 1, 1, 1, 1]: cat = "TD"
+        if patron == [1, 1, 1, 1, 1]:  cat = "TD"
         elif patron == [2, 1, 1, 1]:   cat = "1P"
-        elif patron == [2, 2, 1]:       cat = "2P"
-        elif patron == [3, 1, 1]:       cat = "T"
-        elif patron == [3, 2]:          cat = "TP"
-        elif patron == [4, 1]:          cat = "P"
-        elif patron == [5]:             cat = "Q"
+        elif patron == [2, 2, 1]:      cat = "2P"
+        elif patron == [3, 1, 1]:      cat = "T"
+        elif patron == [3, 2]:         cat = "TP"
+        elif patron == [4, 1]:         cat = "P"
+        elif patron == [5]:            cat = "Q"
 
         conteos_globales[cat] += 1
         consola.print(f"   {i+1:<5} | {numero:.5f}  | {cat}")
 
-    consola.print("\n--- TABLA DE FRECUENCIAS (POKER) ---", 'subtitulo')
+    consola.print("\n>>> TABLA DE FRECUENCIAS (POKER)", 'subtitulo')
     consola.print(f"   {'Categoría':<10} | {'Oi (Obs)':<10} | {'Ei (Esp)':<10} | {'(E-O)^2/E':<15}")
-    consola.print("-" * 55)
+    consola.print("." * 55)
 
     probs = {
         "TD": 0.3024, "1P": 0.5040, "2P": 0.1080,
@@ -305,15 +305,15 @@ def prueba_poker(lista_ri, alpha, consola):
     gl = 6
     valor_critico = chi2.ppf(1 - alpha, gl)
 
-    consola.print("-" * 55)
-    consola.print(f"   Chi2 Calc: {chi_total:.6f}")
-    consola.print(f"   Valor Crítico (gl={gl}): {valor_critico:.6f}")
+    consola.print("." * 55)
+    consola.print(f"   Chi2 Calc Total         : {chi_total:.6f}")
+    consola.print(f"   Valor Crítico (gl={gl})   : {valor_critico:.6f}")
 
     if chi_total < valor_critico:
-        consola.print("\n   CONCLUSIÓN: APROBADO ✅", 'exito')
+        consola.print("\n  >> DICTAMEN: APROBADO [OK]", 'exito')
         return True
     else:
-        consola.print("\n   CONCLUSIÓN: RECHAZADO ❌", 'error')
+        consola.print("\n  >> DICTAMEN: RECHAZADO [FALLO]", 'error')
         return False
 
 # --- INTERFAZ GRÁFICA ---
@@ -324,11 +324,11 @@ class SimuladorApp:
         self.root.title("Suite de Análisis Estadístico para Simulación")
         self.root.geometry("1100x750")
         
-        color_fondo = "#F3F4F6" 
-        color_panel = "#FFFFFF" 
-        color_texto = "#1F2937" 
-        color_acento = "#4F46E5" 
-        color_inputs = "#E5E7EB" 
+        color_fondo = "#F3F4F6"
+        color_panel = "#FFFFFF"
+        color_texto = "#1F2937"
+        color_acento = "#4F46E5"
+        color_inputs = "#E5E7EB"
         
         self.root.configure(bg=color_fondo)
 
@@ -342,16 +342,16 @@ class SimuladorApp:
         style.configure('Header.TLabel', font=('Helvetica', 14, 'bold'), background=color_panel, foreground=color_acento)
         
         style.configure('TButton', font=('Helvetica', 10, 'bold'), background=color_acento, foreground='white', borderwidth=0, padding=8)
-        style.map('TButton', background=[('active', '#4338CA')]) 
+        style.map('TButton', background=[('active', '#4338CA')])
 
         style.configure('TEntry', fieldbackground=color_inputs, foreground=color_texto, font=('Helvetica', 10), padding=5, borderwidth=0)
         style.configure('TCombobox', fieldbackground=color_inputs, foreground=color_texto, font=('Helvetica', 10), padding=5, borderwidth=0)
 
         style.configure('TNotebook', background=color_fondo, borderwidth=0)
-        
-        # CORREGIDO línea 354: padding con valor válido
-        style.configure('TNotebook.Tab', background='#D1D5DB', foreground='#4B5563', padding=[10, 5], font=('Helvetica', 10, 'bold'), borderwidth=0)
-        style.map('TNotebook.Tab', background=[('selected', color_panel)], foreground=[('selected', color_acento)]) 
+
+        # FIX LÍNEA 352: padding estaba vacío "padding="
+        style.configure('TNotebook.Tab', background='#D1D5DB', foreground='#4B5563', padding=[12, 6], font=('Helvetica', 10, 'bold'), borderwidth=0)
+        style.map('TNotebook.Tab', background=[('selected', color_panel)], foreground=[('selected', color_acento)])
 
         self.crear_widgets()
 
@@ -376,7 +376,7 @@ class SimuladorApp:
         self.combo_confianza.current(1)
         self.combo_confianza.grid(row=1, column=5, padx=(0, 25))
 
-        self.btn_generar = ttk.Button(panel_sup, text="⚙️ Ejecutar Pruebas", command=self.ejecutar)
+        self.btn_generar = ttk.Button(panel_sup, text="EJECUTAR PRUEBAS", command=self.ejecutar)
         self.btn_generar.grid(row=1, column=6, padx=(10, 20))
 
         self.lbl_resumen = ttk.Label(panel_sup, text="", font=('Helvetica', 11, 'bold'))
@@ -436,11 +436,11 @@ class SimuladorApp:
         lista_ri = []
 
         consola_datos = self.tabs["Datos (Ri)"]
-        consola_datos.print("="*40, 'titulo')
-        consola_datos.print("   NÚMEROS GENERADOS (Ri)", 'titulo')
-        consola_datos.print("="*40, 'titulo')
+        consola_datos.print("+" + "-"*58 + "+", 'titulo')
+        consola_datos.print("| NÚMEROS GENERADOS (Ri)                                   |", 'titulo')
+        consola_datos.print("+" + "-"*58 + "+", 'titulo')
         consola_datos.print(f"   {'i':<5} | {'Ri'}")
-        consola_datos.print("-" * 20)
+        consola_datos.print("." * 20)
 
         for i in range(cantidad):
             xn = (a * xn + c) % m
@@ -456,9 +456,9 @@ class SimuladorApp:
         p6 = prueba_poker(lista_ri, alpha, self.tabs["Poker"])
 
         consola_resumen = self.tabs["Resumen Final"]
-        consola_resumen.print("="*60, 'titulo')
-        consola_resumen.print("   RESUMEN FINAL DE PRUEBAS", 'titulo')
-        consola_resumen.print("="*60, 'titulo')
+        consola_resumen.print("+" + "-"*58 + "+", 'titulo')
+        consola_resumen.print("| REPORTE FINAL DE EVALUACIÓN                              |", 'titulo')
+        consola_resumen.print("+" + "-"*58 + "+", 'titulo')
         
         pruebas = [("1. Medias", p1), ("2. Varianza", p2), ("3. Chi-Cuadrada", p3),
                    ("4. Kolmogorov-S.", p4), ("5. Corridas", p5), ("6. Poker", p6)]
@@ -466,17 +466,17 @@ class SimuladorApp:
         todo_ok = True
         for nombre, paso in pruebas:
             if paso:
-                consola_resumen.print(f"   {nombre:<20}: APROBADO ✅", 'exito')
+                consola_resumen.print(f"   * {nombre:<20}: [ APROBADO ]", 'exito')
             else:
-                consola_resumen.print(f"   {nombre:<20}: RECHAZADO ❌", 'error')
+                consola_resumen.print(f"   * {nombre:<20}: [ RECHAZADO ]", 'error')
                 todo_ok = False
 
         if todo_ok:
-            self.lbl_resumen.config(text="✓ TODAS APROBADAS", foreground="#16A34A")
-            consola_resumen.print("\n   ESTADO FINAL: EXCELENTE (Pasan todas) 🌟", 'exito')
+            self.lbl_resumen.config(text="ESTADO: TODAS APROBADAS", foreground="#16A34A")
+            consola_resumen.print("\n   >>> ESTADO FINAL: EXCELENTE (Pasan todas las pruebas) <<<", 'exito')
         else:
-            self.lbl_resumen.config(text="⚠ HAY RECHAZOS", foreground="#DC2626")
-            consola_resumen.print("\n   ESTADO FINAL: ALGUNAS FALLAN ⚠️", 'error')
+            self.lbl_resumen.config(text="ESTADO: HAY RECHAZOS", foreground="#DC2626")
+            consola_resumen.print("\n   >>> ESTADO FINAL: ALERTA (Algunas pruebas fallaron) <<<", 'error')
 
         self.notebook.select(7)
 
