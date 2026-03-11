@@ -123,7 +123,7 @@ def prueba_chi_cuadrada(lista_ri, alpha, consola):
     limites = [round(i * ancho, 2) for i in range(num_intervalos)]
     limites.append(1.00)
 
-    counts = * num_intervalos
+    counts = nano * num_intervalos
     for val in lista_ri:
         for i in range(num_intervalos):
             lower = limites[i]
@@ -357,7 +357,7 @@ class SimuladorApp:
         style.map('TCombobox', fieldbackground=[('readonly', color_inputs)]) 
 
         style.configure('TNotebook', background=color_fondo, borderwidth=0)
-        style.configure('TNotebook.Tab', background=color_panel, foreground='#94a3b8', padding=, font=('Segoe UI', 10, 'bold'), borderwidth=0) 
+        style.configure('TNotebook.Tab', background=color_panel, foreground='#94a3b8', padding= nano, font=('Segoe UI', 10, 'bold'), borderwidth=0) 
         style.map('TNotebook.Tab', background=[('selected', color_fondo)], foreground=[('selected', '#38bdf8')]) 
 
         self.crear_widgets(color_panel, color_fondo)
